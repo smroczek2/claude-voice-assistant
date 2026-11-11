@@ -1,0 +1,43 @@
+# Every path the shared release may contain. scripts/release.py copies only
+# git-tracked files that match a line here. Lines that start with an audience
+# name and a colon ship only in that audience's build.
+
+.gitignore
+LICENSE
+README.md
+INSTALL.md
+setup.sh
+release-allowlist.txt
+tsconfig.json
+.claude-plugin/plugin.json
+.claude-plugin/marketplace.json
+hooks/hooks.json
+hooks/register.tsx
+hooks/spoken.ts
+types/index.d.ts
+tests/*.ts
+tests/*.tsx
+daemon/.gitignore
+daemon/.python-version
+daemon/pyproject.toml
+daemon/uv.lock
+daemon/config.toml
+daemon/models.lock.json
+daemon/native/VoiceAudio.swift
+daemon/voz/*.py
+daemon/tests/*.py
+scripts/ledger.py
+scripts/session_index.py
+scripts/orch_state.py
+scripts/orch_hook.py
+scripts/orch_mine.py
+scripts/orch_guards.py
+orchestrator/rules.md
+orchestrator/CONTEXT.md
+scripts/prepare_models.py
+scripts/pin_models.py
+scripts/voz_setup.py
+scripts/release.py
+scripts/tests/*.py
+profile-template/CLAUDE.md
+profile-template/context/*.md

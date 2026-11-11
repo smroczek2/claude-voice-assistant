@@ -1,0 +1,53 @@
+{
+  "name": "voz",
+  "version": "0.3.0",
+  "description": "Local English voice front desk for Claude Desktop sessions. Explicit on/off and pause/resume controls.",
+  "types": "./types/index.d.ts",
+  "license": "MIT",
+  "userConfig": {
+    "vozDir": {
+      "type": "string",
+      "title": "Voice daemon folder",
+      "description": "Leave empty to use the included daemon.",
+      "default": ""
+    },
+    "port": {
+      "type": "number",
+      "title": "Local port",
+      "description": "Voice daemon HTTP port.",
+      "default": 8766
+    },
+    "autoStart": {
+      "type": "boolean",
+      "title": "Start automatically",
+      "description": "Resume the designated voice session on startup. Off by default.",
+      "default": false
+    },
+    "tts": {
+      "type": "string",
+      "title": "Speech engine",
+      "description": "Local neural speech: Chatterbox Turbo, Qwen3 (mlx), or Kokoro. Claude remains the conversational brain.",
+      "default": "turbo",
+      "options": [
+        "mlx",
+        "kokoro",
+        "turbo"
+      ]
+    },
+    "spokenSentences": {
+      "type": "number",
+      "title": "Spoken sentences",
+      "description": "How many sentences of each reply the voice speaks. 0 (the default) speaks the whole reply. A number from 1 to 20 speaks only that many sentences per text block, plus a final question in plain prose; the pane shows the full reply.",
+      "default": 0
+    },
+    "summaryMinutes": {
+      "type": "number",
+      "title": "Meeting summary interval",
+      "description": "Minutes between meeting summaries; 0 disables them.",
+      "default": 15
+    }
+  },
+  "author": {
+    "name": "Spencer Mroczek"
+  }
+}

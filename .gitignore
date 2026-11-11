@@ -1,0 +1,11 @@
+daemon/.venv/
+__pycache__/
+*.py[oc]
+.claude-plugin/types/
+.DS_Store
+*.log
+*~
+*.swp
+
+.pytest_cache/
+.claude/settings.local.json

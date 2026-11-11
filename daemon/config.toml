@@ -1,0 +1,85 @@
+# voz configuration. Every value has a default; override only what you want.
+# config.toml is looked up in the current folder, then the voz folder, then ~/.voz/config.toml.
+
+[audio]
+backend = "native"          # macOS echo-cancelled capture and playback in one engine
+input_device = ""   # fixed microphone (name substring or index). Empty = default device.
+                           # The app captures only this device; never system sound or other apps.
+sample_rate = 16000
+
+[vad]
+mode = "auto"              # "auto": detects when you speak; "ptt": records only while you hold the key (panel button or Space)
+start_threshold = 0.45     # Silero: 0.3 very sensitive, 0.6 clear voice only (Handy uses 0.3)
+end_threshold = 0.3
+min_speech_ms = 100        # minimum onset
+silence_ms = 450           # silence that closes a sentence (sent to transcription)
+turn_gap_ms = 2500         # pause with no further speech that closes the whole message (daemon/mod)
+pre_roll_ms = 450
+max_utterance_s = 60
+barge_in = true           # natural interruption; native shared graph cancels speaker echo
+barge_in_threshold = 0.85
+barge_in_min_ms = 350
+interrupt_min_s = 1.0      # an interruption counts only with at least this much audio...
+interrupt_min_words = 3    # ...and this many words; otherwise the voice resumes where it was
+
+[stt]
+model = "mlx-community/whisper-large-v3-turbo"
+language = "en"
+min_duration_s = 0.3       # a quick "yes" lasts about 0.4 s
+initial_prompt = ""        # empty = per-language prompt (see vozes.PROMPTS); pt-PT pulls European spelling
+live = true                # live text while you speak, with Parakeet (MLX); Whisper does the final pass
+live_model = "mlx-community/parakeet-tdt-0.6b-v3"
+
+[cleanup]
+mode = "regras"            # "off" | "regras" (filler words and repetitions, deterministic) | "modelo" (rules + Qwen3-4B on MLX with guards)
+model = "mlx-community/Qwen3-4B-4bit"
+
+[falante]
+enabled = false            # rewrite by a local model. Off: Claude already answers in a spoken style and
+                           # goes straight to streaming voice (faster and without changing the meaning).
+base_url = "http://localhost:1234/v1"
+model = "falante"
+max_sentences = 4
+passthrough_max_chars = 350
+timeout_s = 60
+
+[tts]
+lang = "en"
+backend = "turbo"          # local neural speech: turbo, mlx (Qwen3), or kokoro
+speed = 1.0               # actual pitch-preserving native playback rate
+expression = "restrained"  # Qwen style: restrained or natural; Kokoro uses fixed voice style
+turbo_model = "mlx-community/chatterbox-turbo-8bit"
+kokoro_model = "mlx-community/Kokoro-82M-bf16"
+kokoro_voice = "bm_george"
+voice = "Ryan"              # compatibility field; neural voice is selected below
+prefer_premium = true      # say: use "Joana (Premium)"/"(Enhanced)" if installed
+rate = 185                 # say: words per minute
+# Qwen3-TTS: with mlx_ref_audio it clones that voice (10-20 s of speech; the .txt next to it holds the transcript).
+# Record your own voice as the reference with:  voz --gravar-ref
+# Without a reference it uses one of the built-in voices (mlx_voice), which sound like pt-BR.
+mlx_model = "mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit"
+mlx_ref_audio = "~/.voz/ref.wav"  # explicitly selected local clone; never committed audio
+mlx_ref_text = ""                     # empty = read the .txt with the same name
+mlx_voice = "Ryan"
+mlx_lang = "en"
+
+[claude]
+permission_mode = "default"   # spoken text never auto-approves a tool; "yes" by voice answers each question
+model = "sonnet"           # conversation: sonnet is much faster; "opus", or empty for the Claude Code default
+max_turns = 0
+
+[ui]
+enabled = true
+port = 8766
+ack_sound = true           # short chime when your sentence is accepted
+
+[meeting]
+input_device = ""   # microphone used in meeting mode (picks up the room); empty = keep the current one
+threshold = 0.7                # voice similarity above which it is the same person (0.6 more permissive, 0.8 stricter)
+silence_ms = 900               # in meetings people pause longer before a sentence closes
+
+[keywords]
+dynamic = true             # short sentences with no known seed are classified by the local model (any language)
+model = "mlx-community/Qwen3-4B-4bit"
+max_words = 6              # only sentences up to this length can be commands (skip / hush / stop)
+
